@@ -4,6 +4,13 @@ import (
 	"fmt"
 	folder "module/placeholder"
 	"os"
+
+	"github.com/atos-digital/10100-cli/internal/gen"
+)
+
+const (
+	root              = "template"
+	defaultModuleName = "module/placeholder"
 )
 
 func init() {
@@ -38,11 +45,9 @@ func cmdInit() {
 	default:
 		fmt.Println("init: too many arguments")
 	}
-	_, err = folder.Folder.ReadDir("internal")
-	if err != nil {
-		fmt.Println("init: ", err)
-		return
-	}
+
+	parser := gen.NewParser(dir, defaultModuleName, moduleName, folder.Folder)
+	parser.Parse()
 	fmt.Println("module name: ", moduleName, "dir: ", dir)
 }
 
