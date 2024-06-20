@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/atos-digital/10100-cli/internal/gen"
+	"github.com/atos-digital/10100-cli/internal/cmd"
 )
 
 const (
@@ -10,7 +10,7 @@ const (
 )
 
 func main() {
-	// cmd.New()
-	parser := gen.NewParser(root, defaultModuleName, "module/placeholder2")
-	parser.Parse()
+	cmd.New()
+	// parser := gen.NewParser(root, defaultModuleName, "module/placeholder2")
+	// parser.Parse()
 }

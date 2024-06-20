@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	folder "module/placeholder"
 	"os"
 )
 
@@ -36,6 +37,11 @@ func cmdInit() {
 		dir = args[1]
 	default:
 		fmt.Println("init: too many arguments")
+	}
+	_, err = folder.Folder.ReadDir("internal")
+	if err != nil {
+		fmt.Println("init: ", err)
+		return
 	}
 	fmt.Println("module name: ", moduleName, "dir: ", dir)
 }
