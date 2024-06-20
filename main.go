@@ -1,17 +1,16 @@
 package main
 
 import (
-	"github.com/atos-digital/10100-cli/internal/cli"
 	"github.com/atos-digital/10100-cli/internal/gen"
 )
 
 const (
 	root              = "template"
-	defaultModuleName = "module/placeholder2"
+	defaultModuleName = "module/placeholder"
 )
 
 func main() {
-	cli.New()
-	parser := gen.NewParser(root, defaultModuleName, "module/placeholder")
+	// cmd.New()
+	parser := gen.NewParser(root, defaultModuleName, "module/placeholder2")
 	parser.Parse()
 }
