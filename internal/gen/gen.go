@@ -1,19 +1,26 @@
 package gen
 
 import (
+	"archive/tar"
+	"embed"
+	"fmt"
 	"go/format"
 	"go/parser"
 	"go/token"
-	"io/fs"
+	"io"
 	"log"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 
 	"golang.org/x/mod/modfile"
 	"golang.org/x/tools/go/ast/astutil"
 )
+
+//go:generate tar --disable-copyfile -cf template.tar template
+
+//go:embed template.tar
+var templateZip embed.FS
 
 type Parser struct {
 	// DirPath is the path to the folder to parse.
@@ -31,28 +38,81 @@ func NewParser(dirPath, defaultModuleName, newModuleName string) *Parser {
 }
 
 func (p *Parser) Parse() error {
-	fileSystem := os.DirFS(p.DirPath)
-	return fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
+	file, err := templateZip.Open("template.tar")
+	if err != nil {
+		return fmt.Errorf("could not open")
+	}
+	defer file.Close()
+
+	reader := tar.NewReader(file)
+	dir, _ := os.Getwd()
+
+	for {
+		header, nextErr := reader.Next()
+		if nextErr != nil {
+			if nextErr == io.EOF {
+				break
+			}
+			fmt.Println("error reading next file", nextErr)
 		}
-		path = filepath.Join(p.DirPath, path)
-		if !d.IsDir() {
-			if strings.HasSuffix(path, ".mod") {
-				err := p.UpdateMod(path, p.NewModName)
+
+		targetPath := strings.Replace(header.Name, "template", dir, 1)
+
+		if header.FileInfo().IsDir() {
+			err := os.MkdirAll(targetPath, 0777)
+			if err != nil {
+				return err
+			}
+		} else {
+			switch {
+			case strings.HasSuffix(targetPath, ".mod"):
+				err := p.UpdateMod(header.Name, p.NewModName)
 				if err != nil {
 					log.Fatal(err)
 				}
-			}
-			if strings.HasSuffix(path, ".go") {
-				err := p.UpdateFile(path, p.CurrentModName, p.NewModName)
+			case strings.HasSuffix(targetPath, ".go"):
+				err := p.UpdateFile(targetPath, p.CurrentModName, p.NewModName)
 				if err != nil {
 					log.Fatal(err)
 				}
+			default:
+				dst, err := os.Create(targetPath)
+				if err != nil {
+					return err
+				}
+				defer dst.Close()
+
+				_, copyErr := io.Copy(dst, reader)
+				if copyErr != nil {
+					return copyErr
+				}
 			}
 		}
-		return nil
-	})
+	}
+
+	// fileSystem := os.DirFS(p.DirPath)
+	// return fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, err error) error {
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	path = filepath.Join(p.DirPath, path)
+	// 	if !d.IsDir() {
+	// 		if strings.HasSuffix(path, ".mod") {
+	// 			err := p.UpdateMod(path, p.NewModName)
+	// 			if err != nil {
+	// 				log.Fatal(err)
+	// 			}
+	// 		}
+	// 		if strings.HasSuffix(path, ".go") {
+	// 			err := p.UpdateFile(path, p.CurrentModName, p.NewModName)
+	// 			if err != nil {
+	// 				log.Fatal(err)
+	// 			}
+	// 		}
+	// 	}
+	// 	return nil
+	// })
+	return nil
 }
 
 func (p *Parser) UpdateMod(path, modName string) error {
