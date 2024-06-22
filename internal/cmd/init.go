@@ -32,6 +32,8 @@ func cmdInit() {
 	switch {
 	case len(args) == 0:
 		fmt.Println("init: missing module name")
+		helpInit()
+		return
 	case len(args) == 1:
 		moduleName = args[0]
 		dir, err = os.Getwd()
@@ -44,11 +46,12 @@ func cmdInit() {
 		dir = args[1]
 	default:
 		fmt.Println("init: too many arguments")
+		helpInit()
+		return
 	}
 
 	parser := gen.NewParser(dir, defaultModuleName, moduleName, folder.Folder)
 	parser.Parse()
-	fmt.Println("module name: ", moduleName, "dir: ", dir)
 }
 
 func helpInit() {

@@ -55,12 +55,14 @@ func (p *Parser) Parse() error {
 
 			switch {
 			case strings.HasSuffix(path, ".mod"):
-				err := p.UpdateMod(path, src, p.NewModName)
+				err := p.updateMod(path, src, p.NewModName)
 				if err != nil {
 					return err
 				}
+			case path == "folder.go":
+				// skip folder.go
 			case strings.HasSuffix(path, ".go"):
-				err := p.UpdateFile(path, src, p.CurrentModName, p.NewModName)
+				err := p.updateFile(path, src, p.CurrentModName, p.NewModName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -81,7 +83,7 @@ func (p *Parser) Parse() error {
 	})
 }
 
-func (p *Parser) UpdateMod(path string, src fs.File, modName string) error {
+func (p *Parser) updateMod(path string, src fs.File, modName string) error {
 	bytes, err := io.ReadAll(src)
 	if err != nil {
 		return err
@@ -97,7 +99,7 @@ func (p *Parser) UpdateMod(path string, src fs.File, modName string) error {
 	return os.WriteFile(filepath.Join(p.DirPath, path), newBytes, 0644)
 }
 
-func (p *Parser) UpdateFile(path string, src fs.File, oldModName, newModName string) error {
+func (p *Parser) updateFile(path string, src fs.File, oldModName, newModName string) error {
 	fset := token.NewFileSet()
 	bytes, err := io.ReadAll(src)
 	if err != nil {
