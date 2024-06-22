@@ -1,9 +1,11 @@
 package gen
 
 import (
+	"embed"
 	"go/format"
 	"go/parser"
 	"go/token"
+	"io"
 	"io/fs"
 	"log"
 	"os"
@@ -21,33 +23,59 @@ type Parser struct {
 	DirPath        string
 	CurrentModName string
 	NewModName     string
+	Template       embed.FS
 }
 
-func NewParser(dirPath, defaultModuleName, newModuleName string) *Parser {
+func NewParser(dirPath, defaultModuleName, newModuleName string, template embed.FS) *Parser {
 	return &Parser{
 		DirPath:        dirPath,
 		CurrentModName: defaultModuleName,
-		NewModName:     newModuleName}
+		NewModName:     newModuleName,
+		Template:       template,
+	}
 }
 
 func (p *Parser) Parse() error {
-	fileSystem := os.DirFS(p.DirPath)
-	return fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, err error) error {
+	return fs.WalkDir(p.Template, ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		path = filepath.Join(p.DirPath, path)
-		if !d.IsDir() {
-			if strings.HasSuffix(path, ".mod") {
-				err := p.UpdateMod(path, p.NewModName)
+
+		if d.IsDir() {
+			err := os.MkdirAll(filepath.Join(p.DirPath, path), 0777)
+			if err != nil {
+				return err
+			}
+		} else {
+			src, err := p.Template.Open(path)
+			if err != nil {
+				return err
+			}
+			defer src.Close()
+
+			switch {
+			case strings.HasSuffix(path, ".mod"):
+				err := p.updateMod(path, src, p.NewModName)
+				if err != nil {
+					return err
+				}
+			case path == "folder.go":
+				// skip folder.go
+			case strings.HasSuffix(path, ".go"):
+				err := p.updateFile(path, src, p.CurrentModName, p.NewModName)
 				if err != nil {
 					log.Fatal(err)
 				}
-			}
-			if strings.HasSuffix(path, ".go") {
-				err := p.UpdateFile(path, p.CurrentModName, p.NewModName)
+			default:
+				dst, err := os.Create(filepath.Join(p.DirPath, path))
 				if err != nil {
-					log.Fatal(err)
+					return err
+				}
+				defer dst.Close()
+
+				_, err = io.Copy(dst, src)
+				if err != nil {
+					return err
 				}
 			}
 		}
@@ -55,8 +83,8 @@ func (p *Parser) Parse() error {
 	})
 }
 
-func (p *Parser) UpdateMod(path, modName string) error {
-	bytes, err := os.ReadFile(path)
+func (p *Parser) updateMod(path string, src fs.File, modName string) error {
+	bytes, err := io.ReadAll(src)
 	if err != nil {
 		return err
 	}
@@ -68,12 +96,16 @@ func (p *Parser) UpdateMod(path, modName string) error {
 	file.AddModuleStmt(modName)
 
 	newBytes := modfile.Format(file.Syntax)
-	return os.WriteFile(path, newBytes, 0644)
+	return os.WriteFile(filepath.Join(p.DirPath, path), newBytes, 0644)
 }
 
-func (p *Parser) UpdateFile(path, oldModName, newModName string) error {
+func (p *Parser) updateFile(path string, src fs.File, oldModName, newModName string) error {
 	fset := token.NewFileSet()
-	file, err := parser.ParseFile(fset, path, nil, parser.ParseComments)
+	bytes, err := io.ReadAll(src)
+	if err != nil {
+		return err
+	}
+	file, err := parser.ParseFile(fset, "", bytes, parser.ParseComments)
 	if err != nil {
 		return err
 	}
@@ -94,9 +126,12 @@ func (p *Parser) UpdateFile(path, oldModName, newModName string) error {
 			}
 		}
 	}
-	newFile, err := os.OpenFile(path, os.O_TRUNC|os.O_WRONLY, 0644)
+
+	dst, err := os.Create(filepath.Join(p.DirPath, path))
 	if err != nil {
 		return err
 	}
-	return format.Node(newFile, fset, file)
+	defer dst.Close()
+
+	return format.Node(dst, fset, file)
 }
