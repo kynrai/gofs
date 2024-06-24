@@ -13,7 +13,7 @@ const (
 	defaultModuleName = "module/placeholder"
 )
 
-const initUsage = `usage: 10100 init [module-name] [dir]
+const initUsage = `usage: ttz init [module-name] [dir]
 
 "init" initializes a new module in the specified directory.
 If no directory is specified, the current directory is used.
@@ -21,8 +21,8 @@ If no directory is specified, the current directory is used.
 The module name should be a go module name, e.g. "github.com/user/module".
 
 Example:
-  10100 init mymodule /path/to/dir
-  10100 init mymodule
+  ttz init mymodule /path/to/dir
+  ttz init mymodule
 
 `
 
