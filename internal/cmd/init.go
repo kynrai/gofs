@@ -5,7 +5,7 @@ import (
 	folder "module/placeholder"
 	"os"
 
-	"github.com/atos-digital/10100-cli/internal/gen"
+	"github.com/atos-digital/ttz/internal/gen"
 )
 
 const (

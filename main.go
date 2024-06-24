@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/atos-digital/10100-cli/internal/cmd"
+	"github.com/atos-digital/ttz/internal/cmd"
 )
 
 func main() {

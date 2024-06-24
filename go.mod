@@ -1,4 +1,4 @@
-module github.com/atos-digital/10100-cli
+module github.com/atos-digital/ttz
 
 go 1.22.2
 
