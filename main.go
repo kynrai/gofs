@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	cmd.New()
+	cmd.Ttz.Run()
 }
