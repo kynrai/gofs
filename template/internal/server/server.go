@@ -8,12 +8,10 @@ import (
 	"time"
 
 	"module/placeholder/config"
-
-	"github.com/go-chi/chi/v5"
 )
 
 type Server struct {
-	r    *chi.Mux
+	r    *http.ServeMux
 	srv  *http.Server
 	conf config.Config
 }
@@ -21,7 +19,7 @@ type Server struct {
 func New(conf config.Config) (*Server, error) {
 	s := new(Server)
 	s.conf = conf
-	s.r = chi.NewRouter()
+	s.r = http.NewServeMux()
 	s.srv = &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
