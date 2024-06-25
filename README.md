@@ -10,3 +10,9 @@ cd ttz
 go mod tidy
 go install
 ```
+
+## Usage
+
+```bash
+ttz
+```
