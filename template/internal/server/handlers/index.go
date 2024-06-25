@@ -1,9 +1,12 @@
 package handlers
 
-import "net/http"
+import (
+	"module/placeholder/internal/ui"
+	"net/http"
 
-func Index() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello world"))
-	})
+	"github.com/a-h/templ"
+)
+
+func PageIndex() http.Handler {
+	return templ.Handler(ui.Index())
 }

@@ -22,3 +22,7 @@ go.work
 go.work.sum
 
 .env
+node_modules
+tmp
+internal/server/assets/css/styles.css
+.DS_Store
