@@ -1,16 +1,23 @@
 package server
 
 import (
-	"io/fs"
 	"module/placeholder/internal/server/assets"
 	"module/placeholder/internal/server/handlers"
 	"net/http"
 )
 
 func (s *Server) Routes() {
-	s.r.Handle("GET /assets/*", http.StripPrefix("/assets/", http.FileServerFS(fs.FS(assets.FS))))
+	// filserver route for assets
+	assetMux := http.NewServeMux()
+	assetMux.Handle("GET /*", http.StripPrefix("/assets/", http.FileServer(http.FS(assets.FS))))
+	s.r.Handle("GET /assets/*", assetMux)
 
-	s.r.Handle("GET /", handlers.PageIndex())
+	// handlers for normal routes with all general middleware
+	routesMux := http.NewServeMux()
+	routesMux.Handle("GET /", handlers.PageIndex())
+	routesHandler := s.middlewares(routesMux)
 
-	s.srv.Handler = s.middlewares(s.r)
+	s.r.Handle("GET /", routesHandler)
+
+	s.srv.Handler = s.r
 }
