@@ -7,7 +7,24 @@ import (
 	"github.com/go-chi/cors"
 )
 
-func (s *Server) middlewares(h http.Handler) http.Handler {
+func (s *Server) assetsMiddlewares(h http.Handler) http.Handler {
+	middlewares := []func(http.Handler) http.Handler{
+		cors.Handler(cors.Options{
+			AllowedOrigins:   s.conf.AllowedOrigins,
+			AllowedMethods:   []string{"GET", "OPTIONS"},
+			AllowedHeaders:   []string{"Accept", "Content-Type", "X-CSRF-Token"},
+			AllowCredentials: true,
+			MaxAge:           300,
+		}),
+		middleware.Compress(5),
+	}
+	for _, m := range middlewares {
+		h = m(h)
+	}
+	return h
+}
+
+func (s *Server) routeMiddlewares(h http.Handler) http.Handler {
 	middlewares := []func(http.Handler) http.Handler{
 		cors.Handler(cors.Options{
 			AllowedOrigins:   s.conf.AllowedOrigins,
