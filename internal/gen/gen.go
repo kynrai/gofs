@@ -2,17 +2,18 @@ package gen
 
 import (
 	"embed"
+	"encoding/json"
 	"go/format"
 	"go/parser"
 	"go/token"
 	"io"
 	"io/fs"
-	"log"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 
+	"github.com/atos-digital/ttz/internal/vscode"
 	"golang.org/x/mod/modfile"
 	"golang.org/x/tools/go/ast/astutil"
 )
@@ -33,6 +34,17 @@ func NewParser(dirPath, defaultModuleName, newModuleName string, template embed.
 		NewModName:     newModuleName,
 		Template:       template,
 	}
+}
+
+func (p Parser) copyFile(path string, src fs.File) error {
+	dst, err := os.Create(filepath.Join(p.DirPath, path))
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+
+	_, err = io.Copy(dst, src)
+	return err
 }
 
 func (p *Parser) Parse() error {
@@ -64,16 +76,15 @@ func (p *Parser) Parse() error {
 			case strings.HasSuffix(path, ".go"):
 				err := p.updateFile(path, src, p.CurrentModName, p.NewModName)
 				if err != nil {
-					log.Fatal(err)
+					return err
 				}
-			default:
-				dst, err := os.Create(filepath.Join(p.DirPath, path))
+			case path == ".vscode/settings.json":
+				err := p.updateVscodeSettings(path, src)
 				if err != nil {
 					return err
 				}
-				defer dst.Close()
-
-				_, err = io.Copy(dst, src)
+			default:
+				err = p.copyFile(path, src)
 				if err != nil {
 					return err
 				}
@@ -134,4 +145,24 @@ func (p *Parser) updateFile(path string, src fs.File, oldModName, newModName str
 	defer dst.Close()
 
 	return format.Node(dst, fset, file)
+}
+
+func (p *Parser) updateVscodeSettings(path string, src fs.File) error {
+	set := vscode.Settings{}
+	err := json.NewDecoder(src).Decode(&set)
+	if err != nil {
+		return err
+	}
+	set.SetGopls(vscode.Gopls{
+		FormattingLocal:   p.NewModName,
+		FormattingGofumpt: true,
+	})
+	dst, err := os.Create(filepath.Join(p.DirPath, path))
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+	enc := json.NewEncoder(dst)
+	enc.SetIndent("", "  ")
+	return enc.Encode(set)
 }
