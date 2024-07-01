@@ -1,6 +1,7 @@
 package server
 
 import (
+	"module/placeholder/internal/auth"
 	"net/http"
 
 	"github.com/go-chi/chi/v5/middleware"
@@ -39,6 +40,7 @@ func (s *Server) routeMiddlewares(h http.Handler) http.Handler {
 		middleware.StripSlashes,
 		middleware.Recoverer,
 		middleware.Compress(5),
+		auth.Middleware(s.conf.Local),
 	}
 	for _, m := range middlewares {
 		h = m(h)
