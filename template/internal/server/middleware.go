@@ -12,12 +12,13 @@ func (s *Server) assetsMiddlewares(h http.Handler) http.Handler {
 	middlewares := []func(http.Handler) http.Handler{
 		cors.Handler(cors.Options{
 			AllowedOrigins:   s.conf.AllowedOrigins,
-			AllowedMethods:   []string{"GET", "OPTIONS"},
-			AllowedHeaders:   []string{"Accept", "Content-Type", "X-CSRF-Token"},
+			AllowedMethods:   []string{http.MethodGet, http.MethodOptions},
+			AllowedHeaders:   []string{"X-CSRF-Token"},
 			AllowCredentials: true,
 			MaxAge:           300,
 		}),
 		middleware.Compress(5),
+		middleware.SetHeader("Cache-Control", "max-age=604800, stale-while-revalidate=86400"),
 	}
 	for _, m := range middlewares {
 		h = m(h)
@@ -29,15 +30,16 @@ func (s *Server) routeMiddlewares(h http.Handler) http.Handler {
 	middlewares := []func(http.Handler) http.Handler{
 		cors.Handler(cors.Options{
 			AllowedOrigins:   s.conf.AllowedOrigins,
-			AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-			AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+			AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete, http.MethodOptions},
+			AllowedHeaders:   []string{"Authorization", "X-CSRF-Token"},
 			AllowCredentials: true,
 			MaxAge:           300,
 		}),
-		middleware.RedirectSlashes,
+		middleware.Logger,
+		middleware.NoCache,
+		middleware.StripSlashes,
 		middleware.Recoverer,
 		middleware.Compress(5),
-		middleware.Logger,
 		auth.Middleware(s.conf.Local),
 	}
 	for _, m := range middlewares {
