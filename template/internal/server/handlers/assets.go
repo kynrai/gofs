@@ -6,31 +6,57 @@ import (
 	"hash/crc32"
 	"io"
 	"net/http"
+	"sync"
 )
 
-func HandleAssets(assets embed.FS) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		hasher := crc32.NewIEEE()
-		file, err := assets.Open(r.URL.Path)
-		if err != nil {
-			http.Error(w, "file not found", http.StatusNotFound)
-			return
-		}
-		defer file.Close()
+type HashedAssets struct {
+	assets embed.FS
+	hashes sync.Map
+}
 
-		if _, err := io.Copy(hasher, file); err != nil {
+func NewHashedAssets(assets embed.FS) *HashedAssets {
+	return &HashedAssets{assets: assets}
+}
+
+func (h *HashedAssets) calculateHash(path string) (string, error) {
+	hasher := crc32.NewIEEE()
+	file, err := h.assets.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	if _, err := io.Copy(hasher, file); err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf(`"%d-%v"`, len(path), hasher.Sum32()), nil
+}
+
+func (h *HashedAssets) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	etag, ok := h.hashes.Load(r.URL.Path)
+	if !ok {
+		var err error
+		etag, err = h.calculateHash(r.URL.Path)
+		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		h.hashes.Store(r.URL.Path, etag)
+	}
 
-		etag := fmt.Sprintf("%d-%v", len(r.URL.Path), hasher.Sum32())
-		ifNoneMatch := r.Header.Get("If-None-Match")
+	ifNoneMatch := r.Header.Get("If-None-Match")
 
-		if ifNoneMatch == etag {
-			w.WriteHeader(http.StatusNotModified)
-		} else {
-			w.Header().Add("ETag", etag)
-			http.FileServerFS(assets).ServeHTTP(w, r)
-		}
+	etagString, ok := etag.(string)
+	if !ok {
+		http.Error(w, "etag is not a string", http.StatusInternalServerError)
+		return
+	}
+
+	if ifNoneMatch == etagString {
+		w.WriteHeader(http.StatusNotModified)
+	} else {
+		w.Header().Add("ETag", etagString)
+		http.FileServerFS(h.assets).ServeHTTP(w, r)
 	}
 }
