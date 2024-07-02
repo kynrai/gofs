@@ -1,10 +1,12 @@
 package server
 
 import (
+	"net/http"
+
 	"module/placeholder/internal/auth"
 	"module/placeholder/internal/server/assets"
 	"module/placeholder/internal/server/handlers"
-	"net/http"
+	"module/placeholder/internal/server/logging"
 )
 
 func (s *Server) Routes() {
@@ -19,10 +21,10 @@ func (s *Server) Routes() {
 	routesMux.Handle("GET /user", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user := auth.UserFromContext(r.Context())
 		if user != nil {
-			w.Write([]byte("Hello, " + user.ID + "!"))
+			logging.Write(w, []byte("Hello, "+user.ID+"!"))
 			return
 		}
-		w.Write([]byte("Hello, World!"))
+		logging.Write(w, []byte("Hello, World!"))
 	}))
 	s.r.Handle("GET /", s.routeMiddlewares(routesMux))
 
