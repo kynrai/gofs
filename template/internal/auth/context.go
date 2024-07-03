@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 )
 
@@ -26,6 +27,7 @@ func Middleware(local bool) func(next http.Handler) http.Handler {
 			if local {
 				r = r.WithContext(WithUser(r.Context(), &LocalUser))
 			} else {
+				fmt.Println("TODO: implement token parsing")
 				// get user from token
 				// TODO: implement token parsing
 			}

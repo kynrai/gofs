@@ -4,16 +4,16 @@ templ Modal() {
 	<dialog id="modal">
 		<button autofocus>
 			<script>
-                me().on("click", ev => { me("#modal").close() })
-            </script>
+				me().on("click", ev => { me("#modal").close() })
+			</script>
 			Close
 		</button>
 		<p>Modal content</p>
 	</dialog>
 	<button>
 		<script>
-            me().on("click", ev => { me("#modal").showModal() })
-        </script>
+			me().on("click", ev => { me("#modal").showModal() })
+		</script>
 		Show the modal
 	</button>
 }

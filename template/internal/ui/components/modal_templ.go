@@ -26,7 +26,7 @@ func Modal() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<dialog id=\"modal\"><button autofocus><script>\n                me().on(\"click\", ev => { me(\"#modal\").close() })\n            </script>Close</button><p>Modal content</p></dialog> <button><script>\n            me().on(\"click\", ev => { me(\"#modal\").showModal() })\n        </script>Show the modal</button>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<dialog id=\"modal\"><button autofocus><script>\n\t\t\t\tme().on(\"click\", ev => { me(\"#modal\").close() })\n\t\t\t</script>Close</button><p>Modal content</p></dialog> <button><script>\n\t\t\tme().on(\"click\", ev => { me(\"#modal\").showModal() })\n\t\t</script>Show the modal</button>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
