@@ -11,7 +11,7 @@ services:
       - 5432:5432
     environment:
       POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: data
     logging:
       driver: none

@@ -1,4 +1,4 @@
-package main
+package cloudsql
 
 import (
 	"context"

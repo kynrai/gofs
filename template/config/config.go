@@ -12,6 +12,7 @@ type Config struct {
 	Port           string
 	AllowedOrigins []string
 	Local          bool
+	DSN            string
 }
 
 func New() Config {
@@ -24,6 +25,7 @@ func New() Config {
 			getEnvDefault("ALLOWED_ORIGINS", fmt.Sprintf("http://%s:%s,https://%s:%s", host, port, host, port)), ",",
 		),
 		Local: getEnvDefault("LOCAL", "false") == "true",
+		DSN:   getEnvDefault("DSN", "postgresql://user:password@localhost/data?sslmode=disable"),
 	}
 }
 

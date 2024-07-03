@@ -8,12 +8,16 @@ import (
 	"time"
 
 	"module/placeholder/config"
+	"module/placeholder/internal/db/gormpg"
+
+	"gorm.io/gorm"
 )
 
 type Server struct {
 	r    *http.ServeMux
 	srv  *http.Server
 	conf config.Config
+	db   *gorm.DB
 }
 
 func New(conf config.Config) (*Server, error) {
@@ -26,7 +30,19 @@ func New(conf config.Config) (*Server, error) {
 		Addr:         fmt.Sprintf("%s:%s", conf.Host, conf.Port),
 		Handler:      s.r,
 	}
+	db, err := s.initdb()
+	if err != nil {
+		return nil, err
+	}
+	s.db = db
 	return s, nil
+}
+
+func (s *Server) initdb() (*gorm.DB, error) {
+	if s.conf.Local {
+		return gormpg.PG(s.conf.DSN)
+	}
+	return gormpg.CloudSQL(s.conf.DSN)
 }
 
 func (s *Server) ListenAndServe() error {
