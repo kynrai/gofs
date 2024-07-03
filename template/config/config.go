@@ -23,7 +23,7 @@ func New() Config {
 		AllowedOrigins: strings.Split(
 			getEnvDefault("ALLOWED_ORIGINS", fmt.Sprintf("http://%s:%s,https://%s:%s", host, port, host, port)), ",",
 		),
-		Local: getEnvDefault("LOCAL", "true") == "true",
+		Local: getEnvDefault("LOCAL", "false") == "true",
 	}
 }
 
