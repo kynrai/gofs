@@ -1,0 +1,23 @@
+name: Golang CI
+
+on: workflow_dispatch
+
+jobs:
+  cache_checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/upload-artifact@v3
+        with:
+          name: checkout-${{ github.run_id }}
+          path: ${{ github.workspace }}/**/*
+
+  lint:
+    needs: cache_checkout
+    name: Lint
+    uses: "./.github/workflows/lint.yml"
+
+  test:
+    needs: cache_checkout
+    name: Test
+    uses: ./.github/workflows/test.yml
