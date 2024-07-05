@@ -39,10 +39,17 @@ func New(conf config.Config) (*Server, error) {
 }
 
 func (s *Server) initdb() (*gorm.DB, error) {
-	if s.conf.Local {
+	switch {
+	case s.conf.Env.Local() && s.conf.DSN != "":
 		return gormpg.PG(s.conf.DSN)
+	case s.conf.Env.Dev() && s.conf.DSN != "":
+		return gormpg.CloudSQL(s.conf.DSN)
+	case s.conf.Env.Prod() && s.conf.DSN != "":
+		return gormpg.CloudSQL(s.conf.DSN)
+	default:
+		log.Println("server: no database connection")
+		return nil, nil
 	}
-	return gormpg.CloudSQL(s.conf.DSN)
 }
 
 func (s *Server) ListenAndServe() error {

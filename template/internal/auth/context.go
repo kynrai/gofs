@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+
+	"module/placeholder/config"
 )
 
 type contextKey string
@@ -21,10 +23,10 @@ func WithUser(ctx context.Context, user *User) context.Context {
 	return context.WithValue(ctx, userContextKey, user)
 }
 
-func Middleware(local bool) func(next http.Handler) http.Handler {
+func Middleware(env config.Environment) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if local {
+			if env.Local() {
 				r = r.WithContext(WithUser(r.Context(), &LocalUser))
 			} else {
 				fmt.Println("TODO: implement token parsing")
