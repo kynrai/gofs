@@ -4,7 +4,7 @@ go 1.22.4
 
 require (
 	cloud.google.com/go/cloudsqlconn v1.11.0
-	github.com/a-h/templ v0.2.731
+	github.com/a-h/templ v0.2.747
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-chi/cors v1.2.1
 	github.com/jackc/pgx/v5 v5.6.0
