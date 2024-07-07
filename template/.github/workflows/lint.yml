@@ -4,18 +4,14 @@ on: workflow_call
 
 jobs:
   lint:
-    name: Lint
+    name: golangci-lint
     runs-on: ubuntu-latest
     steps:
-      - name: Get Cached Checkout
-        uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
+        name: Get Cached Checkout
         with:
           name: checkout-${{ github.run_id }}
-      - uses: actions/setup-go@v5
-        name: Install Golang
-        with:
-          go-version-file: "go.mod"
-      - name: GolangCI-Lint
-        uses: golangci/golangci-lint-action@v6
+      - uses: golangci/golangci-lint-action@v6
+        name: Run golangci-lint
         with:
           version: v1.59

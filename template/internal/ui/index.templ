@@ -1,7 +1,5 @@
 package ui
 
-import "module/placeholder/internal/ui/components"
-
 templ Index() {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -14,8 +12,27 @@ templ Index() {
 		<body>
 			<main class="flex">
 				<h1>10.10.0</h1>
-				@components.Modal()
+				@Modal()
 			</main>
 		</body>
 	</html>
+}
+
+// Example components, can delete or adapt
+templ Modal() {
+	<dialog id="modal">
+		<button autofocus>
+			<script>
+				me().on("click", ev => { me("#modal").close() })
+			</script>
+			Close
+		</button>
+		<p>Modal content</p>
+	</dialog>
+	<button>
+		<script>
+			me().on("click", ev => { me("#modal").showModal() })
+		</script>
+		Show the modal
+	</button>
 }
