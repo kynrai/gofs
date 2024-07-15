@@ -1,0 +1,26 @@
+name: Templ fmt
+
+on: workflow_call
+
+permissions:
+  contents: read
+
+jobs:
+  templ:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        name: Get Cached Checkout
+        with:
+          name: checkout-${{ github.run_id }}
+      - uses: actions/setup-go@v5
+        name: Install Golang
+        with:
+          go-version-file: "go.mod"
+      - name: Install templ
+        run: go install github.com/a-h/templ/cmd/templ@$(go list -m github.com/a-h/templ | cut -d' ' -f2)
+      - name: Run templ fmt .
+        run: templ fmt .
+      - name: Check if any files changed
+        run: git diff --exit-code

@@ -2,6 +2,10 @@ name: Golang CI
 
 on: workflow_dispatch
 
+permissions:
+  pull-requests: write
+  contents: read
+
 jobs:
   checkout:
     name: Checkout
@@ -41,3 +45,13 @@ jobs:
     needs: checkout
     name: Test
     uses: ./.github/workflows/test.yml
+
+  commit:
+    needs: checkout
+    name: Commit
+    uses: ./.github/workflows/commit.yml
+
+  templ-fmt:
+    needs: checkout
+    name: Templ
+    uses: ./.github/workflows/templ-fmt.yml

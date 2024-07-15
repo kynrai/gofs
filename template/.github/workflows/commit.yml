@@ -1,0 +1,14 @@
+name: Conventional Commit
+
+on: workflow_call
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check message
+        uses: atos-digital/PRConventionalCommits@v1.0.0
+        with:
+          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert","style"]'
+          add_label: "true"
