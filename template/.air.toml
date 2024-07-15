@@ -5,7 +5,7 @@ tmp_dir = "tmp"
 [build]
 args_bin = []
 bin = "./tmp/main"
-cmd = "npx tailwindcss -i ./internal/ui/styles.css -o ./internal/server/assets/css/styles.css && templ generate && go build -o ./tmp/main cmd/server/main.go"
+cmd = "npx tailwindcss -i ./internal/ui/styles.css -o ./internal/server/assets/css/styles.css --minify && templ generate && go build -o ./tmp/main cmd/server/main.go"
 delay = 1000
 exclude_dir = ["assets", "tmp", "vendor", "testdata"]
 exclude_file = []
