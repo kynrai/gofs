@@ -2,16 +2,17 @@ services:
   postgres:
     container_name: postgres
     image: postgres:alpine
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=dev
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "learn"]
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U user -d dev'"]
       interval: 10s
-      timeout: 5s
-      retries: 5
+      timeout: 3s
+      retries: 3
     ports:
       - 5432:5432
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: data
     logging:
       driver: none
