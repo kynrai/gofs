@@ -9,13 +9,17 @@ templ Index() {
 		<link rel="stylesheet" href="/assets/css/styles.css"/>
 		<script src="/assets/js/htmx.min.js"></script>
 		<script defer src="/assets/js/alpine.js"></script>
-		<body x-data>
-			<main class="flex">
-				<h1>10.10.0</h1>
-				@Modal("my_modal", "Click me") {
-					<h3 class="text-3xl">Modal title</h3>
-					<p>Modal content goes here</p>
-				}
+		<body>
+			<main class="flex w-full flex-col">
+				<h1 class="mx-auto text-2xl">10.10.0</h1>
+				<label>
+					<h2 class="text-lg">Demo Modal</h2>
+					<button
+						hx-get="/modal"
+						hx-target="main"
+						hx-swap="afterbegin"
+					>Open Modal</button>
+				</label>
 			</main>
 		</body>
 	</html>

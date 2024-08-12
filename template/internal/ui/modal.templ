@@ -1,26 +1,22 @@
 package ui
 
-import "fmt"
+templ ModalDemo() {
+	@Modal("demo", "Demo Modal") {
+		<h2 class="text-lg">Demo Modal</h2>
+		<p>Modal content</p>
+	}
+}
 
-templ Modal(id string, label any) {
-	<div
-		class=""
-		@click={ fmt.Sprintf("%s.showModal()", id) }
+templ Modal(id string, label string) {
+	<dialog
+		id={ id }
+		x-data="{ modal : $el }"
+		x-ref="modal"
+		x-init="$el.showModal()"
 	>
-		// you can use a string or a templ.Component as the 'label'
-		// of the modal button
-		if s, ok := label.(string); ok {
-			{ s }
-		} else if c, ok := label.(templ.Component); ok {
-			@c
-		}
-	</div>
-	<dialog id={ id } class="">
-		<div class="">
-			{ children... }
-		</div>
-		<form method="dialog" class="">
-			<button>close</button>
-		</form>
+		{ children... }
+		<button
+			@click="modal.close(); modal.remove();"
+		>close</button>
 	</dialog>
 }

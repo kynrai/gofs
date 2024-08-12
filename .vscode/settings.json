@@ -1,0 +1,35 @@
+{
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/*_templ.go": true
+  },
+  "editor.formatOnSave": true,
+  "gopls": {
+    "formatting.local": "github.com/atos-digital",
+    "formatting.gofumpt": true
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "[templ]": {
+    "editor.defaultFormatter": "a-h.templ"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "tailwindCSS.includeLanguages": {
+    "templ": "html"
+  },
+  "emmet.includeLanguages": {
+    "templ": "html"
+  }
+}
