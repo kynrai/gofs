@@ -1,4 +1,4 @@
-package handlers
+package page
 
 import (
 	"module/placeholder/internal/ui"
@@ -7,6 +7,6 @@ import (
 	"github.com/a-h/templ"
 )
 
-func PageIndex() http.Handler {
+func Index() http.Handler {
 	return templ.Handler(ui.Index())
 }
