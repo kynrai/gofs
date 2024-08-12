@@ -26,7 +26,15 @@ func Index() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><meta charset=\"UTF-8\"><title>10.10.0</title><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><link rel=\"stylesheet\" href=\"/assets/css/styles.css\"><script src=\"/assets/js/htmx.min.js\"></script><script defer src=\"/assets/js/alpine.js\"></script><body><main class=\"flex w-full flex-col\"><h1 class=\"mx-auto text-2xl\">10.10.0</h1><label><h2 class=\"text-lg\">Demo Modal</h2><button hx-get=\"/modal\" hx-target=\"main\" hx-swap=\"afterbegin\">Open Modal</button></label></main></body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><meta charset=\"UTF-8\"><title>10.10.0</title><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><link rel=\"stylesheet\" href=\"/assets/css/styles.css\"><script src=\"/assets/js/htmx.min.js\"></script><script defer src=\"/assets/js/alpine.js\"></script><body><main class=\"flex w-full flex-col\"><h1 class=\"mx-auto text-2xl\">10.10.0</h1><label><h2 class=\"text-lg\">Demo Modal</h2><button hx-get=\"/modal\" hx-target=\"main\" hx-swap=\"afterbegin\">Open Modal</button></label>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = Switch("toggle", "Toggle Me", templ.Attributes{}).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</main></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
