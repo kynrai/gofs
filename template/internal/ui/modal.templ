@@ -1,22 +1,29 @@
 package ui
 
 templ ModalDemo() {
-	@Modal("demo", "Demo Modal") {
-		<h2 class="text-lg">Demo Modal</h2>
-		<p>Modal content</p>
+	@Modal() {
+		<div class="h-[150px] w-[200px] p-5">
+			<h2 class="text-lg">Demo Modal</h2>
+			<p>Modal content</p>
+			<button
+				class="btn"
+				@click="modal.close(); modal.remove();"
+			>
+				Close
+			</button>
+		</div>
 	}
 }
 
-templ Modal(id string, label string) {
+templ Modal() {
 	<dialog
-		id={ id }
 		x-data="{ modal : $el }"
 		x-ref="modal"
+		tabindex="-1"
 		x-init="$el.showModal()"
+		class="rounded-lg border-2 border-solid border-black backdrop:bg-black/70"
 	>
+		<div class="fixed inset-0 z-[-1]" @click="modal.close(); modal.remove();"></div>
 		{ children... }
-		<button
-			@click="modal.close(); modal.remove();"
-		>close</button>
 	</dialog>
 }
