@@ -20,6 +20,12 @@ func (s *Server) Routes() {
 	routesMux := http.NewServeMux()
 	routesMux.Handle("GET /", page.Index())
 	routesMux.Handle("GET /modal", handlers.ModalDemo())
+
+	routesMux.Handle("GET /toast-success", handlers.ToastSuccessDemo())
+	routesMux.Handle("GET /toast-info", handlers.ToastInfoDemo())
+	routesMux.Handle("GET /toast-warning", handlers.ToastWarningDemo())
+	routesMux.Handle("GET /toast-error", handlers.ToastErrorDemo())
+
 	routesMux.Handle("GET /user", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user := auth.UserFromContext(r.Context())
 		if user != nil {

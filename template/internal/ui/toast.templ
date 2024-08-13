@@ -1,0 +1,69 @@
+package ui
+
+type ToastVariant string
+
+const ToastContainerID = "toast-container"
+
+templ ToastContainer() {
+	<div id={ ToastContainerID } class="fixed left-1/2 top-5 z-toast mx-auto flex -translate-x-1/2 transform flex-col gap-4"></div>
+}
+
+templ ToastSuccess(msg string) {
+	<div id={ ToastContainerID } hx-swap-oob="afterbegin">
+		<div
+			class="rounded-md bg-green-500 px-4 py-2 text-white transition hover:bg-green-600"
+			x-init="setTimeout(() => { $el.remove() }, 5000)"
+			@click="$el.remove()"
+		>
+			<div class="flex items-center space-x-2">
+				<span class="text-3xl"><i class="bx bx-check"></i></span>
+				<p class="font-bold">{ msg }</p>
+			</div>
+		</div>
+	</div>
+}
+
+templ ToastInfo(msg string) {
+	<div id={ ToastContainerID } hx-swap-oob="afterbegin">
+		<div
+			class="rounded-md bg-sky-500 px-4 py-2 text-white transition hover:bg-sky-600"
+			x-init="setTimeout(() => { $el.remove() }, 5000)"
+			@click="$el.remove()"
+		>
+			<div class="flex items-center space-x-2">
+				<span class="text-3xl"><i class="bx bx-check"></i></span>
+				<p class="font-bold">{ msg }</p>
+			</div>
+		</div>
+	</div>
+}
+
+templ ToastWarning(msg string) {
+	<div id={ ToastContainerID } hx-swap-oob="afterbegin">
+		<div
+			class="rounded-md bg-amber-500 px-4 py-2 text-white transition hover:bg-amber-600"
+			x-init="setTimeout(() => { $el.remove() }, 5000)"
+			@click="$el.remove()"
+		>
+			<div class="flex items-center space-x-2">
+				<span class="text-3xl"><i class="bx bx-check"></i></span>
+				<p class="font-bold">{ msg }</p>
+			</div>
+		</div>
+	</div>
+}
+
+templ ToastError(msg string) {
+	<div id={ ToastContainerID } hx-swap-oob="afterbegin">
+		<div
+			class="rounded-md bg-red-500 px-4 py-2 text-white transition hover:bg-red-600"
+			x-init="setTimeout(() => { $el.remove() }, 5000)"
+			@click="$el.remove()"
+		>
+			<div class="flex items-center space-x-2">
+				<span class="text-3xl"><i class="bx bx-check"></i></span>
+				<p class="font-bold">{ msg }</p>
+			</div>
+		</div>
+	</div>
+}

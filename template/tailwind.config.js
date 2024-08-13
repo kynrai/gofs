@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./internal/ui/**/*.templ"],
   theme: {
-    extend: {},
+    extend: {
+      zIndex: {
+        toast: 100,
+      },
+    },
   },
   plugins: [],
 };

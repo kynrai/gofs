@@ -26,7 +26,15 @@ func Index() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><meta charset=\"UTF-8\"><title>10.10.0</title><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><link rel=\"stylesheet\" href=\"/assets/css/styles.css\"><script src=\"/assets/js/htmx.min.js\"></script><script defer src=\"/assets/js/alpine.js\"></script><body><main class=\"flex w-full flex-col\"><h1 class=\"mx-auto text-2xl\">10.10.0</h1><label><h2 class=\"text-lg\">Demo Modal</h2><button hx-get=\"/modal\" hx-target=\"main\" hx-swap=\"afterbegin\">Open Modal</button></label>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><meta charset=\"UTF-8\"><title>10.10.0</title><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><link rel=\"stylesheet\" href=\"/assets/css/styles.css\"><script src=\"/assets/js/htmx.min.js\"></script><script defer src=\"/assets/js/alpine.js\"></script><body>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = ToastContainer().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main class=\"flex w-full flex-col\"><h1 class=\"mx-auto text-2xl\">10.10.0</h1><label><h2 class=\"text-lg\">Demo: Modal</h2><button class=\"btn\" hx-get=\"/modal\" hx-target=\"main\" hx-swap=\"afterbegin\">Open Modal</button></label><div class=\"flex flex-col\"><h2 class=\"text-lg\">Demo: Toast</h2><div class=\"flex gap-1\"><button class=\"btn\" hx-get=\"/toast-success\" hx-swap=\"none\">Success Toast</button> <button class=\"btn\" hx-get=\"/toast-info\" hx-swap=\"none\">Info Toast</button> <button class=\"btn\" hx-get=\"/toast-warning\" hx-swap=\"none\">Warning Toast</button> <button class=\"btn\" hx-get=\"/toast-error\" hx-swap=\"none\">Error Toast</button></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
