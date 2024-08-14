@@ -13,6 +13,7 @@ type Config struct {
 	AllowedOrigins []string
 	Env            Environment
 	DSN            string
+	ICN            string
 }
 
 func New() Config {
@@ -26,6 +27,7 @@ func New() Config {
 		),
 		Env: Environment(getEnvDefault("ENV", "prod")),
 		DSN: getEnvDefault("DSN", ""),
+		ICN: getEnvDefault("ICN", ""),
 	}
 }
 
