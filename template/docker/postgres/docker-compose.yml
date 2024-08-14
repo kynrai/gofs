@@ -3,7 +3,6 @@ services:
     container_name: postgres
     image: postgres:alpine
     environment:
-      - POSTGRES_HOST=postgres
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=dev

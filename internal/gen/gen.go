@@ -13,9 +13,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/atos-digital/ttz/internal/vscode"
 	"golang.org/x/mod/modfile"
 	"golang.org/x/tools/go/ast/astutil"
+
+	"github.com/atos-digital/ttz/internal/vscode"
 )
 
 type Parser struct {
@@ -54,7 +55,7 @@ func (p *Parser) Parse() error {
 		}
 
 		if d.IsDir() {
-			err := os.MkdirAll(filepath.Join(p.DirPath, path), 0777)
+			err := os.MkdirAll(filepath.Join(p.DirPath, path), 0o777)
 			if err != nil {
 				return err
 			}
@@ -107,7 +108,7 @@ func (p *Parser) updateMod(path string, src fs.File, modName string) error {
 	file.AddModuleStmt(modName)
 
 	newBytes := modfile.Format(file.Syntax)
-	return os.WriteFile(filepath.Join(p.DirPath, path), newBytes, 0644)
+	return os.WriteFile(filepath.Join(p.DirPath, path), newBytes, 0o644)
 }
 
 func (p *Parser) updateFile(path string, src fs.File, oldModName, newModName string) error {
@@ -156,6 +157,7 @@ func (p *Parser) updateVscodeSettings(path string, src fs.File) error {
 	set.SetGopls(vscode.Gopls{
 		FormattingLocal:   p.NewModName,
 		FormattingGofumpt: true,
+		BuildBuildFlags:   []string{"-tags=unit,gendata"},
 	})
 	dst, err := os.Create(filepath.Join(p.DirPath, path))
 	if err != nil {

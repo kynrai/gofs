@@ -12,8 +12,11 @@
   "editor.formatOnSave": true,
   "gopls": {
     "formatting.local": "github.com/atos-digital",
-    "formatting.gofumpt": true
+    "formatting.gofumpt": true,
+    "build.buildFlags": ["-tags=unit,gendata"]
   },
+  "go.testFlags": ["-tags=unit,gendata", "-v", "-count=1"],
+  "go.testEnvFile": "${workspaceFolder}/.env",
   "files.associations": {
     "*.css": "tailwindcss"
   },

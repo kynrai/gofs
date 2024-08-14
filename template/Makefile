@@ -5,13 +5,25 @@ export
 all: run
 .PHONY: all
 
-run:
+run: dbup
 	@air
 .PHONY: run
 
 test: 
 	@go test -v ./...
 .PHONY: test
+
+dbup:
+	@docker compose -f docker/postgres/docker-compose.yml up -d
+.PHONY: dbup
+
+dbdown:
+	@docker compose -f docker/postgres/docker-compose.yml down
+.PHONY: dbdown
+
+gendata: dbdown dbup
+	@go test -v -tags=gendata -count=1 ./...
+.PHONY: gendata
 
 air: 
 	@echo "Installing air"
