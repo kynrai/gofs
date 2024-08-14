@@ -1,6 +1,6 @@
 module module/placeholder
 
-go 1.22.4
+go 1.23
 
 require (
 	cloud.google.com/go/cloudsqlconn v1.11.0

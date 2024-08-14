@@ -1,6 +1,6 @@
 module github.com/atos-digital/ttz
 
-go 1.22.4
+go 1.23
 
 require (
 	golang.org/x/mod v0.18.0
