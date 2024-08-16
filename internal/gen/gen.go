@@ -16,6 +16,8 @@ import (
 	"golang.org/x/mod/modfile"
 	"golang.org/x/tools/go/ast/astutil"
 
+	templParser "github.com/a-h/templ/parser/v2"
+
 	"github.com/atos-digital/ttz/internal/vscode"
 )
 
@@ -79,11 +81,22 @@ func (p *Parser) Parse() error {
 				if err != nil {
 					return err
 				}
+			case strings.HasSuffix(path, ".templ"):
+				err := p.updateTempl(path, src)
+				if err != nil {
+					return err
+				}
 			case path == ".vscode/settings.json":
 				err := p.updateVscodeSettings(path, src)
 				if err != nil {
 					return err
 				}
+			case path == "scripts/air_build.sh":
+				err = p.copyFile(path, src)
+				if err != nil {
+					return err
+				}
+				os.Chmod(filepath.Join(p.DirPath, path), 0o755)
 			default:
 				err = p.copyFile(path, src)
 				if err != nil {
@@ -167,4 +180,31 @@ func (p *Parser) updateVscodeSettings(path string, src fs.File) error {
 	enc := json.NewEncoder(dst)
 	enc.SetIndent("", "  ")
 	return enc.Encode(set)
+}
+
+func (p *Parser) updateTempl(path string, file fs.File) error {
+	b, err := io.ReadAll(file)
+	if err != nil {
+		return err
+	}
+	t, err := templParser.ParseString(string(b))
+	if err != nil {
+		return err
+	}
+	for i, n := range t.Nodes {
+		switch n := n.(type) {
+		case templParser.TemplateFileGoExpression:
+			if strings.HasPrefix(n.Expression.Value, "import") {
+				node := n
+				node.Expression.Value = strings.ReplaceAll(node.Expression.Value, p.CurrentModName, p.NewModName)
+				t.Nodes[i] = node
+			}
+		}
+	}
+	dst, err := os.Create(filepath.Join(p.DirPath, path))
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+	return t.Write(dst)
 }

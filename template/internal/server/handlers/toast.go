@@ -3,27 +3,27 @@ package handlers
 import (
 	"net/http"
 
-	"module/placeholder/internal/ui"
+	"module/placeholder/internal/ui/components"
 
 	"github.com/a-h/templ"
 )
 
 func ToastSuccess(w http.ResponseWriter, r *http.Request, msg string) {
-	templ.Handler(ui.ToastSuccess(msg)).ServeHTTP(w, r)
+	templ.Handler(components.ToastSuccess(msg)).ServeHTTP(w, r)
 }
 
 func ToastInfo(w http.ResponseWriter, r *http.Request, msg string) {
-	templ.Handler(ui.ToastInfo(msg)).ServeHTTP(w, r)
+	templ.Handler(components.ToastInfo(msg)).ServeHTTP(w, r)
 }
 
 func ToastWarning(w http.ResponseWriter, r *http.Request, msg string) {
-	templ.Handler(ui.ToastWarning(msg)).ServeHTTP(w, r)
+	templ.Handler(components.ToastWarning(msg)).ServeHTTP(w, r)
 }
 
 func ToastError(w http.ResponseWriter, r *http.Request, status int, msg string) {
 	w.Header().Add("HX-Reswap", "none")
 	w.WriteHeader(status)
-	templ.Handler(ui.ToastError(msg)).ServeHTTP(w, r)
+	templ.Handler(components.ToastError(msg)).ServeHTTP(w, r)
 }
 
 func ToastSuccessDemo() http.Handler {

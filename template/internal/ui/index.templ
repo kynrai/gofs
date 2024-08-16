@@ -1,5 +1,10 @@
 package ui
 
+import (
+	"module/placeholder/internal/ui/components"
+)
+
+
 templ Index() {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -10,7 +15,7 @@ templ Index() {
 		<script src="/assets/js/htmx.min.js"></script>
 		<script defer src="/assets/js/alpine.js"></script>
 		<body>
-			@ToastContainer()
+			@components.ToastContainer()
 			<main class="flex w-full flex-col">
 				<h1 class="mx-auto text-2xl">10.10.0</h1>
 				<label>
@@ -55,7 +60,7 @@ templ Index() {
 						</button>
 					</div>
 				</div>
-				@Switch("toggle", "Toggle Me", templ.Attributes{})
+				@components.Switch("toggle", "Toggle Me", templ.Attributes{})
 			</main>
 		</body>
 	</html>
