@@ -58,9 +58,9 @@ func (s *Server) ListenAndServe() error {
 	s.Routes()
 	// address for use when testing cookies locally
 	if s.conf.Host == "0.0.0.0" {
-		log.Printf("server: listening on http://localhost:%s", s.conf.Port)
+		log.Printf("Server: listening on http://localhost:%s", s.conf.Port)
 	} else {
-		log.Printf("server: listening on http://%s", s.srv.Addr)
+		log.Printf("Server: listening on http://%s", s.srv.Addr)
 	}
 	return s.srv.ListenAndServe()
 }

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"runtime"
 	"syscall"
 	"time"
 
@@ -14,6 +15,9 @@ import (
 )
 
 func main() {
+	log.Println("Go version:", runtime.Version())
+	log.Println("Go OS/Arch:", runtime.GOOS, runtime.GOARCH)
+
 	conf := config.New()
 	srv, err := server.New(conf)
 	if err != nil {
