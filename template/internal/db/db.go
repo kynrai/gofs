@@ -35,6 +35,10 @@ func LocalPG(dsn string) (*DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error making connection: %v", err)
 	}
+	err = sDb.Ping()
+	if err != nil {
+		return nil, fmt.Errorf("error pinging db: %v", err)
+	}
 	return &DB{
 		conn:    sDb,
 		closeFn: sDb.Close,
@@ -58,12 +62,25 @@ func CloudSQL(dsn, instanceConnectionName string) (*DB, error) {
 		return d.Dial(ctx, instanceConnectionName, opts...)
 	}
 	dbURI := stdlib.RegisterConnConfig(config)
-	dbPool, err := sql.Open("pgx", dbURI)
+	sDb, err := sql.Open("pgx", dbURI)
 	if err != nil {
 		return nil, fmt.Errorf("sql.Open: %w", err)
 	}
+	err = sDb.Ping()
+	if err != nil {
+		return nil, fmt.Errorf("error pinging db: %v", err)
+	}
 	return &DB{
-		conn: dbPool,
+		conn: sDb,
+		closeFn: func() error {
+			if d != nil {
+				_ = d.Close()
+			}
+			if sDb != nil {
+				_ = sDb.Close()
+			}
+			return nil
+		},
 	}, nil
 }
 
@@ -72,7 +89,7 @@ func MigrateTables(db *DB) error {
 		log.Println("migrations: db is nil")
 		return nil
 	}
-	_, err := db.Conn().Exec(migrations.Migrations)
+	_, err := db.Conn().ExecContext(context.Background(), migrations.Migrations)
 	if err != nil {
 		return fmt.Errorf("error executing sql: %v", err)
 	}
