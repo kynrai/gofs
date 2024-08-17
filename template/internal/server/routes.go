@@ -13,8 +13,8 @@ import (
 func (s *Server) Routes() {
 	// filserver route for assets
 	assetMux := http.NewServeMux()
-	assetMux.Handle("GET /*", http.StripPrefix("/assets/", handlers.NewHashedAssets(assets.FS)))
-	s.r.Handle("GET /assets/*", s.assetsMiddlewares(assetMux))
+	assetMux.Handle("GET /{path...}", http.StripPrefix("/assets/", handlers.NewHashedAssets(assets.FS)))
+	s.r.Handle("GET /assets/{path...}", s.assetsMiddlewares(assetMux))
 
 	// handlers for normal routes with all general middleware
 	routesMux := http.NewServeMux()
