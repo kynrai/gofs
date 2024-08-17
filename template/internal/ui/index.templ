@@ -1,9 +1,6 @@
 package ui
 
-import (
-	"module/placeholder/internal/ui/components"
-)
-
+import "module/placeholder/internal/ui/components"
 
 templ Index() {
 	<!DOCTYPE html>
@@ -13,8 +10,9 @@ templ Index() {
 		<meta name="viewport" content="width=device-width,initial-scale=1"/>
 		<link rel="stylesheet" href="/assets/css/styles.css"/>
 		<script src="/assets/js/htmx.min.js"></script>
+		<script src="/assets/js/response-targets.js"></script>
 		<script defer src="/assets/js/alpine.js"></script>
-		<body>
+		<body hx-ext="response-targets" hx-target-error="this">
 			@components.ToastContainer()
 			<main class="flex w-full flex-col">
 				<h1 class="mx-auto text-2xl">10.10.0</h1>

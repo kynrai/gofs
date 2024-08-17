@@ -42,7 +42,7 @@ alpine:
 
 htmx:
 	@echo "Installing htmx"
-	@cd internal/server/assets/js && { curl -O https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js ; cd - ; }
+	@cd internal/server/assets/js && { curl -O https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js ; curl -O https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js ; cd - ; }
 .PHONY: htmx
 
 deps: air templ htmx alpine
