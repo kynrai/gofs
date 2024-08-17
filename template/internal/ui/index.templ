@@ -12,6 +12,9 @@ templ Index() {
 		<script src="/assets/js/htmx.min.js"></script>
 		<script src="/assets/js/response-targets.js"></script>
 		<script defer src="/assets/js/alpine.js"></script>
+		// We are using htmx-extensions to handle response targets so that we can use the hx-target-error attribute to display error messages
+		// when an API request fails. This is a more declarative way to handle errors than using JavaScript.
+		// https://github.com/bigskysoftware/htmx-extensions/blob/main/src/response-targets/README.md
 		<body hx-ext="response-targets" hx-target-error="this">
 			@components.ToastContainer()
 			<main class="flex w-full flex-col">
