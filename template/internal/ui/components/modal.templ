@@ -5,10 +5,7 @@ templ ModalDemo() {
 		<div class="h-[150px] w-[200px] p-5">
 			<h2 class="text-lg">Demo Modal</h2>
 			<p>Modal content</p>
-			<button
-				class="btn"
-				@click="modal.close(); modal.remove();"
-			>
+			<button class="btn" @click="close">
 				Close
 			</button>
 		</div>
@@ -17,13 +14,13 @@ templ ModalDemo() {
 
 templ Modal() {
 	<dialog
-		x-data="{ modal : $el }"
-		x-ref="modal"
+		x-data="{ close() { $el.close(); $el.remove(); }}"
 		tabindex="-1"
 		x-init="$el.showModal()"
-		class="rounded-lg border-2 border-solid border-black backdrop:bg-black/70"
+		class={ "rounded-lg border-2 border-solid border-black backdrop:bg-black/70" }
 	>
-		<div class="fixed inset-0 z-[-1]" @click="modal.close(); modal.remove();"></div>
-		{ children... }
+		<div @click.outside="close">
+			{ children... }
+		</div>
 	</dialog>
 }
