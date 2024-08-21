@@ -10,16 +10,19 @@ templ ToastContainer() {
 
 templ Toast() {
 	<div id={ ToastContainerID } hx-swap-oob="afterbegin">
+		<script>
+		    Alpine.data('toast', () => ({
+					timeoutId: 0,
+					closing: false,
+					close() {
+						this.closing = true;
+						this.$el.classList.remove('opening');
+						setTimeout(() => { this.$el.classList.add('closing'); }, 50);
+					}
+		    }))
+		</script>
 		<div
-			x-data="{ 
-				timeoutId: 0,
-				closing: false,
-				close() {
-					this.closing = true;
-					$el.classList.remove('opening');
-					setTimeout(() => { $el.classList.add('closing'); }, 50);
-				}
-			}"
+			x-data="toast"
 			x-init="timeoutId = setTimeout(() => { close() }, 5000);"
 			@click="clearTimeout(timeoutId); close();"
 			@animationend="if (closing) $el.remove();"
