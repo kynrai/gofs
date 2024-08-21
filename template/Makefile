@@ -14,7 +14,9 @@ test:
 .PHONY: test
 
 dbup:
-	@docker compose -f docker/postgres/docker-compose.yml up -d
+	@if [ -n "$$DSN" ]; then \
+		docker compose -f docker/postgres/docker-compose.yml up -d; \
+    fi
 .PHONY: dbup
 
 dbdown:
