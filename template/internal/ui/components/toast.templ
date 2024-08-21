@@ -11,9 +11,19 @@ templ ToastContainer() {
 templ Toast() {
 	<div id={ ToastContainerID } hx-swap-oob="afterbegin">
 		<div
-			x-data="{ timeoutId: 0 }"
-			x-init="timeoutId = setTimeout(() => { $el.remove() }, 5000);"
-			@click="clearTimeout(timeoutId); $el.remove();"
+			x-data="{ 
+				timeoutId: 0,
+				closing: false,
+				close() {
+					this.closing = true;
+					$el.classList.remove('opening');
+					setTimeout(() => { $el.classList.add('closing'); }, 50);
+				}
+			}"
+			x-init="timeoutId = setTimeout(() => { close() }, 5000);"
+			@click="clearTimeout(timeoutId); close();"
+			@animationend="if (closing) $el.remove();"
+			class="opening [&.closing]:animate-[bounceInDown_200ms_ease-out_reverse] [&.opening]:animate-[bounceInDown_500ms_ease-out]"
 		>
 			{ children... }
 		</div>

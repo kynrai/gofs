@@ -17,7 +17,7 @@ templ Modal() {
 		x-data="{ close() { $el.close(); $el.remove(); }}"
 		tabindex="-1"
 		x-init="$el.showModal()"
-		class={ "rounded-lg border-2 border-solid border-black backdrop:bg-black/70" }
+		class="rounded-lg border-2 border-solid border-black backdrop:bg-black/70"
 	>
 		<div @click.outside="close">
 			{ children... }
