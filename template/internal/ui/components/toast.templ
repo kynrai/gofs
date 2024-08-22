@@ -11,13 +11,13 @@ templ ToastContainer() {
 templ Toast() {
 	<div id={ ToastContainerID } hx-swap-oob="afterbegin">
 		<script>
-		    Alpine.data('toast', () => ({
+			Alpine.data('toast', () => ({
 					timeoutId: 0,
 					close() {
 						this.$el.classList.remove('opening');
 						setTimeout(() => { this.$el.classList.add('closing'); }, 50);
 					}
-		    }))
+			}))
 		</script>
 		<div
 			x-data="toast"

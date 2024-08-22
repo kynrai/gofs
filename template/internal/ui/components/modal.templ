@@ -16,10 +16,9 @@ templ Modal() {
 	<dialog
 		x-data="{ close() { $el.classList.add('closing'); }}"
 		x-init="$el.showModal()"
-		@keydown.escape="close"
 		@animationend="if ($el.classList.contains('closing')) $el.close(); $el.remove();"
 		tabindex="-1"
-		class="rounded-lg border-2 border-solid border-black backdrop:bg-black/70 [&.closing]:animate-[zoomOut_150ms_ease-in-out]"
+		class="rounded-lg border-2 border-solid border-black backdrop:bg-black/70 [&.closing]:animate-[zoomOut_200ms_ease-in-out]"
 	>
 		<div @click.outside="close">
 			{ children... }
