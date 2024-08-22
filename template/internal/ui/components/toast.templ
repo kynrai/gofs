@@ -22,9 +22,9 @@ templ Toast() {
 		<div
 			x-data="toast"
 			x-init="timeoutId = setTimeout(() => { close() }, 5000);"
-			@click="clearTimeout(timeoutId); close();"
+			@click="clearTimeout(timeoutId); $el.remove();"
 			@animationend="if ($el.classList.contains('closing')) $el.remove();"
-			class="opening [&.closing]:animate-[bounceInDown_200ms_ease-out_reverse] [&.opening]:animate-[bounceInDown_500ms_ease-out]"
+			class="opening [&.closing]:animate-[bounceInDown_500ms_ease-out_reverse] [&.opening]:animate-[bounceInDown_500ms_ease-out]"
 		>
 			{ children... }
 		</div>

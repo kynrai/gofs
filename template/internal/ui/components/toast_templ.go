@@ -82,7 +82,7 @@ func Toast() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap-oob=\"afterbegin\"><script>\n\t\t    Alpine.data('toast', () => ({\n\t\t\t\t\ttimeoutId: 0,\n\t\t\t\t\tclose() {\n\t\t\t\t\t\tthis.$el.classList.remove('opening');\n\t\t\t\t\t\tsetTimeout(() => { this.$el.classList.add('closing'); }, 50);\n\t\t\t\t\t}\n\t\t    }))\n\t\t</script><div x-data=\"toast\" x-init=\"timeoutId = setTimeout(() =&gt; { close() }, 5000);\" @click=\"clearTimeout(timeoutId); close();\" @animationend=\"if ($el.classList.contains(&#39;closing&#39;)) $el.remove();\" class=\"opening [&amp;.closing]:animate-[bounceInDown_200ms_ease-out_reverse] [&amp;.opening]:animate-[bounceInDown_500ms_ease-out]\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap-oob=\"afterbegin\"><script>\n\t\t    Alpine.data('toast', () => ({\n\t\t\t\t\ttimeoutId: 0,\n\t\t\t\t\tclose() {\n\t\t\t\t\t\tthis.$el.classList.remove('opening');\n\t\t\t\t\t\tsetTimeout(() => { this.$el.classList.add('closing'); }, 50);\n\t\t\t\t\t}\n\t\t    }))\n\t\t</script><div x-data=\"toast\" x-init=\"timeoutId = setTimeout(() =&gt; { close() }, 5000);\" @click=\"clearTimeout(timeoutId); $el.remove();\" @animationend=\"if ($el.classList.contains(&#39;closing&#39;)) $el.remove();\" class=\"opening [&amp;.closing]:animate-[bounceInDown_500ms_ease-out_reverse] [&amp;.opening]:animate-[bounceInDown_500ms_ease-out]\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
