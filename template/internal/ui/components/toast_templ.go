@@ -82,7 +82,7 @@ func Toast() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap-oob=\"afterbegin\"><script>\n\t\t    Alpine.data('toast', () => ({\n\t\t\t\t\ttimeoutId: 0,\n\t\t\t\t\tclosing: false,\n\t\t\t\t\tclose() {\n\t\t\t\t\t\tthis.closing = true;\n\t\t\t\t\t\tthis.$el.classList.remove('opening');\n\t\t\t\t\t\tsetTimeout(() => { this.$el.classList.add('closing'); }, 50);\n\t\t\t\t\t}\n\t\t    }))\n\t\t</script><div x-data=\"toast\" x-init=\"timeoutId = setTimeout(() =&gt; { close() }, 5000);\" @click=\"clearTimeout(timeoutId); close();\" @animationend=\"if (closing) $el.remove();\" class=\"opening [&amp;.closing]:animate-[bounceInDown_200ms_ease-out_reverse] [&amp;.opening]:animate-[bounceInDown_500ms_ease-out]\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap-oob=\"afterbegin\"><script>\n\t\t    Alpine.data('toast', () => ({\n\t\t\t\t\ttimeoutId: 0,\n\t\t\t\t\tclose() {\n\t\t\t\t\t\tthis.$el.classList.remove('opening');\n\t\t\t\t\t\tsetTimeout(() => { this.$el.classList.add('closing'); }, 50);\n\t\t\t\t\t}\n\t\t    }))\n\t\t</script><div x-data=\"toast\" x-init=\"timeoutId = setTimeout(() =&gt; { close() }, 5000);\" @click=\"clearTimeout(timeoutId); close();\" @animationend=\"if ($el.classList.contains(&#39;closing&#39;)) $el.remove();\" class=\"opening [&amp;.closing]:animate-[bounceInDown_200ms_ease-out_reverse] [&amp;.opening]:animate-[bounceInDown_500ms_ease-out]\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -135,7 +135,7 @@ func ToastSuccess(msg string) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(msg)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/ui/components/toast.templ`, Line: 39, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/ui/components/toast.templ`, Line: 37, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -192,7 +192,7 @@ func ToastInfo(msg string) templ.Component {
 			var templ_7745c5c3_Var10 string
 			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(msg)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/ui/components/toast.templ`, Line: 47, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/ui/components/toast.templ`, Line: 45, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {
@@ -249,7 +249,7 @@ func ToastWarning(msg string) templ.Component {
 			var templ_7745c5c3_Var13 string
 			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(msg)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/ui/components/toast.templ`, Line: 55, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/ui/components/toast.templ`, Line: 53, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
@@ -306,7 +306,7 @@ func ToastError(msg string) templ.Component {
 			var templ_7745c5c3_Var16 string
 			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(msg)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/ui/components/toast.templ`, Line: 63, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/ui/components/toast.templ`, Line: 61, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 			if templ_7745c5c3_Err != nil {
