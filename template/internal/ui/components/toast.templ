@@ -10,17 +10,12 @@ templ ToastContainer() {
 
 templ Toast() {
 	<div id={ ToastContainerID } hx-swap-oob="afterbegin">
-		<script>
-			Alpine.data('toast', () => ({
-					timeoutId: 0,
-					close() {
-						this.$el.classList.remove('opening');
-						setTimeout(() => { this.$el.classList.add('closing'); }, 50);
-					}
-			}))
-		</script>
 		<div
-			x-data="toast"
+			x-data="{
+					timeoutId: 0,
+					// https://css-tricks.com/restart-css-animation/ workaround for re-triggering animation
+					close() { $el.classList.remove('opening'); void $el.offsetWidth; $el.classList.add('closing');}
+			}"
 			x-init="timeoutId = setTimeout(() => { close() }, 5000);"
 			@click="clearTimeout(timeoutId); $el.remove();"
 			@animationend="if ($el.classList.contains('closing')) $el.remove();"
