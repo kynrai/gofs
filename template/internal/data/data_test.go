@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"module/placeholder/config"
+	"module/placeholder/internal/config"
 	"module/placeholder/internal/db"
 )
 

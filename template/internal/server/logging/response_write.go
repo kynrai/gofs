@@ -1,13 +1,14 @@
 package logging
 
 import (
-	"log"
-	"net/http"
+	"context"
+
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/trace"
 )
 
-func Write(w http.ResponseWriter, b []byte) {
-	_, err := w.Write(b)
-	if err != nil {
-		log.Printf("Write failed: %v", err)
-	}
+func Trace(ctx context.Context, spanName string) trace.Span {
+	tr := otel.GetTracerProvider().Tracer("example/server")
+	_, span := tr.Start(ctx, spanName, trace.WithSpanKind(trace.SpanKindServer))
+	return span
 }

@@ -2,11 +2,13 @@ package server
 
 import (
 	"net/http"
+	"slices"
 
 	"module/placeholder/internal/auth"
 
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 func (s *Server) assetsMiddlewares(h http.Handler) http.Handler {
@@ -21,6 +23,7 @@ func (s *Server) assetsMiddlewares(h http.Handler) http.Handler {
 		middleware.Compress(5),
 		middleware.SetHeader("Cache-Control", "max-age=604800, stale-while-revalidate=86400"),
 	}
+	slices.Reverse(middlewares)
 	for _, m := range middlewares {
 		h = m(h)
 	}
@@ -37,14 +40,22 @@ func (s *Server) routeMiddlewares(h http.Handler) http.Handler {
 			MaxAge:           300,
 		}),
 		middleware.Logger,
+		OpenTelemetry,
 		middleware.NoCache,
 		middleware.StripSlashes,
 		middleware.Recoverer,
 		middleware.Compress(5),
 		auth.Middleware(s.conf.Env),
 	}
+	slices.Reverse(middlewares)
 	for _, m := range middlewares {
 		h = m(h)
 	}
 	return h
+}
+
+func OpenTelemetry(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		otelhttp.NewMiddleware(r.Method+" "+r.URL.Path)(h).ServeHTTP(w, r)
+	})
 }

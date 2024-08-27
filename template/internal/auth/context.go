@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"module/placeholder/config"
+	"module/placeholder/internal/config"
 )
 
 type contextKey string
