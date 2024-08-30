@@ -1,6 +1,9 @@
 package ui
 
-import "module/placeholder/internal/ui/components"
+import (
+	"module/placeholder/internal/ui/components"
+	"module/placeholder/internal/ui/pages/validation"
+)
 
 templ Index() {
 	<!DOCTYPE html>
@@ -63,6 +66,7 @@ templ Index() {
 					</div>
 				</div>
 				@components.Switch("toggle", "Toggle Me", templ.Attributes{})
+				@validation.TextInput()
 			</main>
 		</body>
 	</html>

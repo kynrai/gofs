@@ -15,6 +15,7 @@ type Config struct {
 	Env            Environment
 	DSN            string
 	ICN            string
+	Tracing        bool
 }
 
 func New() Config {
@@ -27,9 +28,10 @@ func New() Config {
 		AllowedOrigins: strings.Split(
 			getEnvDefault("ALLOWED_ORIGINS", fmt.Sprintf("http://%s:%s,https://%s:%s", host, port, host, port)), ",",
 		),
-		Env: Environment(getEnvDefault("ENV", "prod")),
-		DSN: getEnvDefault("DSN", ""),
-		ICN: getEnvDefault("ICN", ""),
+		Env:     Environment(getEnvDefault("ENV", "prod")),
+		DSN:     getEnvDefault("DSN", ""),
+		ICN:     getEnvDefault("ICN", ""),
+		Tracing: getEnvDefault("TRACING", "false") == "true",
 	}
 }
 

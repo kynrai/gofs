@@ -17,17 +17,19 @@ func (s *Server) Routes() {
 
 	// handlers for normal routes with all general middleware
 	routesMux := http.NewServeMux()
-	routesMux.Handle("GET /", page.Index())
+	routesMux.Handle("GET /{$}", page.Index())
 	routesMux.Handle("GET /modal", handlers.ModalDemo())
 
 	routesMux.Handle("GET /hello", http.HandlerFunc(hello))
+
+	routesMux.Handle("/validate", handlers.Validate())
 
 	routesMux.Handle("GET /toast-success", handlers.ToastSuccessDemo())
 	routesMux.Handle("GET /toast-info", handlers.ToastInfoDemo())
 	routesMux.Handle("GET /toast-warning", handlers.ToastWarningDemo())
 	routesMux.Handle("GET /toast-error", handlers.ToastErrorDemo())
 
-	s.r.Handle("GET /", s.routeMiddlewares(routesMux))
+	s.r.Handle("/", s.routeMiddlewares(routesMux))
 
 	s.srv.Handler = s.r
 }

@@ -20,6 +20,7 @@ func (s *Server) assetsMiddlewares(h http.Handler) http.Handler {
 			AllowCredentials: true,
 			MaxAge:           300,
 		}),
+		middleware.Logger,
 		middleware.Compress(5),
 		middleware.SetHeader("Cache-Control", "max-age=604800, stale-while-revalidate=86400"),
 	}
@@ -40,7 +41,7 @@ func (s *Server) routeMiddlewares(h http.Handler) http.Handler {
 			MaxAge:           300,
 		}),
 		middleware.Logger,
-		OpenTelemetry,
+		// OpenTelemetry,
 		middleware.NoCache,
 		middleware.StripSlashes,
 		middleware.Recoverer,
