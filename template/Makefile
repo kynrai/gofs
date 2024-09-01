@@ -39,12 +39,20 @@ templ:
 
 alpine:
 	@echo "Installing alpine.js"
-	@cd internal/server/assets/js && { curl -O https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js ; mv cdn.min.js alpine.js ; cd - ; } 
+	@cd internal/server/assets/js && { \
+		curl -s -O https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js ; mv cdn.min.js alpine.js ; \
+		curl -s -O https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js ; mv cdn.min.js collapse.js ; \
+		curl -s -O https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js ; mv cdn.min.js persist.js ; \
+		cd - ; \
+	} 
 .PHONY: alpine
 
 htmx:
 	@echo "Installing htmx"
-	@cd internal/server/assets/js && { curl -O https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js ; curl -O https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js ; cd - ; }
+	@cd internal/server/assets/js && { \
+			curl -s -O https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js ; \
+			curl -s -O https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js ; cd - ; \
+		}
 .PHONY: htmx
 
 deps: air templ htmx alpine
