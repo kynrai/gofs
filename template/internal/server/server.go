@@ -9,6 +9,7 @@ import (
 
 	"module/placeholder/internal/app"
 	"module/placeholder/internal/config"
+	"module/placeholder/internal/dao"
 	"module/placeholder/internal/db"
 
 	"go.opentelemetry.io/otel"
@@ -46,13 +47,13 @@ func New(conf config.Config) (*Server, error) {
 	if err != nil {
 		return nil, fmt.Errorf("db: migrating tables: %w", err)
 	}
+	s.closeFn = append(s.closeFn, s.db.Close)
 
 	err = s.initTelemetry()
 	if err != nil {
 		return nil, fmt.Errorf("server: initializing telemetry: %w", err)
 	}
-
-	s.app = app.New(s.db)
+	s.app = app.New(dao.New(s.db.Conn()))
 	return s, nil
 }
 

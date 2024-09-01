@@ -1,11 +1,13 @@
 package app
 
-import "module/placeholder/internal/db"
+import (
+	"module/placeholder/internal/dao"
+)
 
 type App struct {
-	db db.DB
+	dao dao.Dao
 }
 
-func New(db db.DB) App {
-	return App{db: db}
+func New(dao dao.Dao) App {
+	return App{dao: dao}
 }

@@ -23,7 +23,7 @@ func (d *DB) Conn() *sql.DB {
 	return d.conn
 }
 
-func (d *DB) Close() error {
+func (d *DB) Close(ctx context.Context) error {
 	if d.closeFn == nil {
 		return nil
 	}
