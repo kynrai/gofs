@@ -30,32 +30,32 @@ func (d *DB) Close() error {
 	return d.closeFn()
 }
 
-func LocalPG(dsn string) (*DB, error) {
+func LocalPG(dsn string) (DB, error) {
 	sDb, err := sql.Open("pgx", dsn)
 	if err != nil {
-		return nil, fmt.Errorf("error making connection: %v", err)
+		return DB{}, fmt.Errorf("error making connection: %v", err)
 	}
 	err = sDb.Ping()
 	if err != nil {
-		return nil, fmt.Errorf("error pinging db: %v", err)
+		return DB{}, fmt.Errorf("error pinging db: %v", err)
 	}
-	return &DB{
+	return DB{
 		conn:    sDb,
 		closeFn: sDb.Close,
 	}, nil
 }
 
-func CloudSQL(dsn, instanceConnectionName string) (*DB, error) {
+func CloudSQL(dsn, instanceConnectionName string) (DB, error) {
 	d, err := cloudsqlconn.NewDialer(context.Background(), cloudsqlconn.WithIAMAuthN())
 	if err != nil {
-		return nil, fmt.Errorf("cloudsqlconn.NewDialer: %w", err)
+		return DB{}, fmt.Errorf("cloudsqlconn.NewDialer: %w", err)
 	}
 	var opts []cloudsqlconn.DialOption
 	opts = append(opts, cloudsqlconn.WithPrivateIP())
 
 	config, err := pgx.ParseConfig(dsn)
 	if err != nil {
-		return nil, err
+		return DB{}, err
 	}
 
 	config.DialFunc = func(ctx context.Context, network, instance string) (net.Conn, error) {
@@ -64,13 +64,13 @@ func CloudSQL(dsn, instanceConnectionName string) (*DB, error) {
 	dbURI := stdlib.RegisterConnConfig(config)
 	sDb, err := sql.Open("pgx", dbURI)
 	if err != nil {
-		return nil, fmt.Errorf("sql.Open: %w", err)
+		return DB{}, fmt.Errorf("sql.Open: %w", err)
 	}
 	err = sDb.Ping()
 	if err != nil {
-		return nil, fmt.Errorf("error pinging db: %v", err)
+		return DB{}, fmt.Errorf("error pinging db: %v", err)
 	}
-	return &DB{
+	return DB{
 		conn: sDb,
 		closeFn: func() error {
 			if d != nil {
@@ -84,8 +84,8 @@ func CloudSQL(dsn, instanceConnectionName string) (*DB, error) {
 	}, nil
 }
 
-func MigrateTables(db *DB) error {
-	if db == nil {
+func MigrateTables(db DB) error {
+	if db.conn == nil {
 		log.Println("migrations: db is nil")
 		return nil
 	}

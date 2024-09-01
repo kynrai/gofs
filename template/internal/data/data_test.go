@@ -12,7 +12,7 @@ import (
 
 func TestGenData(t *testing.T) {
 	conf := config.New()
-	var conn *db.DB
+	var conn db.DB
 	var err error
 	for range 5 { // attempts
 		conn, err = db.LocalPG(conf.DSN)

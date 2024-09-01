@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"module/placeholder/internal/app"
 	"module/placeholder/internal/config"
 	"module/placeholder/internal/db"
 
@@ -19,9 +20,10 @@ import (
 
 type Server struct {
 	r       *http.ServeMux
-	srv     *http.Server
+	srv     http.Server
 	conf    config.Config
-	db      *db.DB
+	db      db.DB
+	app     app.App
 	closeFn []func(context.Context) error
 }
 
@@ -29,7 +31,7 @@ func New(conf config.Config) (*Server, error) {
 	s := new(Server)
 	s.conf = conf
 	s.r = http.NewServeMux()
-	s.srv = &http.Server{
+	s.srv = http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		Addr:         fmt.Sprintf("%s:%s", conf.Host, conf.Port),
@@ -49,10 +51,12 @@ func New(conf config.Config) (*Server, error) {
 	if err != nil {
 		return nil, fmt.Errorf("server: initializing telemetry: %w", err)
 	}
+
+	s.app = app.New(s.db)
 	return s, nil
 }
 
-func (s *Server) initDb() (*db.DB, error) {
+func (s *Server) initDb() (db.DB, error) {
 	switch {
 	case s.conf.Env.Local() && s.conf.DSN != "":
 		return db.LocalPG(s.conf.DSN)
@@ -62,7 +66,7 @@ func (s *Server) initDb() (*db.DB, error) {
 		return db.CloudSQL(s.conf.DSN, s.conf.ICN)
 	default:
 		log.Println("server: no database connection")
-		return nil, nil
+		return db.DB{}, nil
 	}
 }
 
