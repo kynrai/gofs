@@ -1,4 +1,4 @@
-$(shell cp -n .env.example .env)
+$(shell cp --update=none .env.example .env)
 include .env
 export
 
