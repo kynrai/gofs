@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/atos-digital/ttz/internal/cmd"
+	"github.com/kynrai/gofs/internal/cmd"
 )
 
 func main() {
-	cmd.Ttz.Run()
+	cmd.Gofs.Run()
 }

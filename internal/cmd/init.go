@@ -5,7 +5,7 @@ import (
 	folder "module/placeholder"
 	"os"
 
-	"github.com/atos-digital/ttz/internal/gen"
+	"github.com/kynrai/gofs/internal/gen"
 )
 
 const (
@@ -13,7 +13,7 @@ const (
 	defaultModuleName = "module/placeholder"
 )
 
-const initUsage = `usage: ttz init [module-name] [dir]
+const initUsage = `usage: gofs init [module-name] [dir]
 
 "init" initializes a new module in the specified directory.
 If no directory is specified, the current directory is used.
@@ -21,15 +21,15 @@ If no directory is specified, the current directory is used.
 The module name should be a go module name, e.g. "github.com/user/module".
 
 Example:
-  ttz init mymodule /path/to/dir
-  ttz init mymodule
+  gofs init mymodule /path/to/dir
+  gofs init mymodule
 
 `
 
 func init() {
-	Ttz.AddCmd(Command{
+	Gofs.AddCmd(Command{
 		Name:  "init",
-		Short: "initialize a new 10100 module",
+		Short: "initialize a new gofs mdodule",
 		Long:  initUsage,
 		Cmd:   cmdInit,
 	})

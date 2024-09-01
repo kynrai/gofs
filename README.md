@@ -1,12 +1,12 @@
-# ttz (10100-cli)
+# gofs (Golang Full Stack)
 
-`ttz` is a 10100 CLI tool to generate opinionated secure projects
+`gofs` is a 10100 CLI tool to generate opinionated secure projects
 
 ## Installation
 
 ```bash
-git clone git@github.com:atos-digital/ttz.git
-cd ttz
+git clone git@github.com:kynrai/go-fs.git
+cd go-fs
 go mod tidy
 go install
 ```
@@ -14,8 +14,16 @@ go install
 ## Usage
 
 ```bash
-ttz
+gofs
 ```
+
+## Current Status
+
+In development but used in production at one of europe's largest tech companies.
+
+## Features + Roadmap
+
+Full docs site coming soon
 
 ## Using generated templates
 

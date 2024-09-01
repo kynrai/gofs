@@ -1,4 +1,4 @@
-module github.com/atos-digital/ttz
+module github.com/kynrai/gofs
 
 go 1.23
 

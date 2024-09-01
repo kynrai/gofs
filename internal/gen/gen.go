@@ -13,12 +13,11 @@ import (
 	"strconv"
 	"strings"
 
+	templParser "github.com/a-h/templ/parser/v2"
 	"golang.org/x/mod/modfile"
 	"golang.org/x/tools/go/ast/astutil"
 
-	templParser "github.com/a-h/templ/parser/v2"
-
-	"github.com/atos-digital/ttz/internal/vscode"
+	"github.com/kynrai/gofs/internal/vscode"
 )
 
 type Parser struct {

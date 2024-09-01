@@ -1,3 +1,3 @@
 package cmd
 
-var Ttz = New("ttz", "A tool for generating 10100 apps.")
+var Gofs = New("gofs", "A tool for generating golang full stack apps.")
