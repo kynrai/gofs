@@ -14,11 +14,14 @@ templ ModalDemo() {
 
 templ Modal() {
 	<dialog
-		x-data="{ close() { $el.classList.add('closing'); }}"
+		x-data="{ 
+			close() { $el.classList.add('closing'); },
+			forceclose() { $el.remove(); },
+		}"
 		x-init="$el.showModal()"
 		@animationend="if ($el.classList.contains('closing')) $el.close(); $el.remove();"
 		tabindex="-1"
-		class="rounded-lg border-2 border-solid border-black backdrop:bg-black/70 [&.closing]:animate-[zoomOut_200ms_ease-in-out]"
+		class="overflow-visible rounded-lg border-2 border-solid border-black backdrop:bg-black/70 [&.closing]:animate-[zoomOut_200ms_ease-in-out]"
 	>
 		<div @click.outside="close">
 			{ children... }

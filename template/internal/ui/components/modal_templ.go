@@ -70,7 +70,7 @@ func Modal() templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<dialog x-data=\"{ close() { $el.classList.add(&#39;closing&#39;); }}\" x-init=\"$el.showModal()\" @animationend=\"if ($el.classList.contains(&#39;closing&#39;)) $el.close(); $el.remove();\" tabindex=\"-1\" class=\"rounded-lg border-2 border-solid border-black backdrop:bg-black/70 [&amp;.closing]:animate-[zoomOut_200ms_ease-in-out]\"><div @click.outside=\"close\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<dialog x-data=\"{ \n\t\t\tclose() { $el.classList.add(&#39;closing&#39;); },\n\t\t\tforceclose() { $el.remove(); },\n\t\t}\" x-init=\"$el.showModal()\" @animationend=\"if ($el.classList.contains(&#39;closing&#39;)) $el.close(); $el.remove();\" tabindex=\"-1\" class=\"overflow-visible rounded-lg border-2 border-solid border-black backdrop:bg-black/70 [&amp;.closing]:animate-[zoomOut_200ms_ease-in-out]\"><div @click.outside=\"close\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
