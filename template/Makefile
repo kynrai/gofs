@@ -21,6 +21,10 @@ dbup:
 	@if [ -n "$$TRACING" ]; then \
 		docker compose -f docker/docker-compose.yml up -d zipkin; \
     fi
+
+	@if [ -n "$$METRICS" ]; then \
+		docker compose -f docker/docker-compose.yml up -d prometheus; \
+    fi
 .PHONY: dbup
 
 dbdown:

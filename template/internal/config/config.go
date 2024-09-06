@@ -16,6 +16,7 @@ type Config struct {
 	DSN            string
 	ICN            string
 	Tracing        string // url to tracing server, e.g. zipkin
+	Metrics        bool   // enable prometheus metrics
 }
 
 func New() Config {
@@ -32,6 +33,7 @@ func New() Config {
 		DSN:     os.Getenv("DSN"),
 		ICN:     os.Getenv("ICN"),
 		Tracing: os.Getenv("TRACING"),
+		Metrics: os.Getenv("METRICS") == "true",
 	}
 }
 

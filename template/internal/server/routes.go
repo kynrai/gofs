@@ -7,6 +7,7 @@ import (
 	"module/placeholder/internal/server/handlers"
 	"module/placeholder/internal/server/handlers/page"
 	"module/placeholder/internal/server/logging"
+	"module/placeholder/internal/server/telemetry/metrics"
 )
 
 func (s *Server) Routes() {
@@ -31,7 +32,7 @@ func (s *Server) Routes() {
 
 	s.r.Handle("/", s.routeMiddlewares(routesMux))
 
-	s.srv.Handler = s.r
+	s.srv.Handler = metrics.Expose(s.r)
 }
 
 func hello(w http.ResponseWriter, r *http.Request) {
