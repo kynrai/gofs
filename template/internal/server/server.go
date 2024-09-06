@@ -11,12 +11,6 @@ import (
 	"module/placeholder/internal/config"
 	"module/placeholder/internal/dao"
 	"module/placeholder/internal/db"
-
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/zipkin"
-	"go.opentelemetry.io/otel/sdk/resource"
-	"go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 )
 
 type Server struct {
@@ -49,10 +43,6 @@ func New(conf config.Config) (*Server, error) {
 	}
 	s.closeFn = append(s.closeFn, s.db.Close)
 
-	err = s.initTelemetry()
-	if err != nil {
-		return nil, fmt.Errorf("server: initializing telemetry: %w", err)
-	}
 	s.app = app.New(dao.New(s.db.Conn()))
 	return s, nil
 }
@@ -69,29 +59,6 @@ func (s *Server) initDb() (db.DB, error) {
 		log.Println("server: no database connection")
 		return db.DB{}, nil
 	}
-}
-
-func (s *Server) initTelemetry() error {
-	exporter, err := zipkin.New(
-		"http://localhost:9411/api/v2/spans",
-	)
-	if err != nil {
-		return err
-	}
-
-	batcher := trace.NewBatchSpanProcessor(exporter)
-
-	tp := trace.NewTracerProvider(
-		trace.WithSpanProcessor(batcher),
-		trace.WithResource(resource.NewWithAttributes(
-			semconv.SchemaURL,
-			semconv.ServiceName(s.conf.ServiceName),
-		)),
-	)
-	otel.SetTracerProvider(tp)
-
-	s.closeFn = append(s.closeFn, tp.Shutdown)
-	return nil
 }
 
 func (s *Server) ListenAndServe() error {

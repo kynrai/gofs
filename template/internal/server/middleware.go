@@ -5,10 +5,10 @@ import (
 	"slices"
 
 	"module/placeholder/internal/auth"
+	"module/placeholder/internal/server/telemetry/tracing"
 
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 func (s *Server) assetsMiddlewares(h http.Handler) http.Handler {
@@ -41,7 +41,7 @@ func (s *Server) routeMiddlewares(h http.Handler) http.Handler {
 			MaxAge:           300,
 		}),
 		middleware.Logger,
-		// OpenTelemetry,
+		tracing.Middleware,
 		middleware.NoCache,
 		middleware.StripSlashes,
 		middleware.Recoverer,
@@ -53,10 +53,4 @@ func (s *Server) routeMiddlewares(h http.Handler) http.Handler {
 		h = m(h)
 	}
 	return h
-}
-
-func OpenTelemetry(h http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		otelhttp.NewMiddleware(r.Method+" "+r.URL.Path)(h).ServeHTTP(w, r)
-	})
 }

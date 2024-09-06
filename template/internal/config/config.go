@@ -15,7 +15,7 @@ type Config struct {
 	Env            Environment
 	DSN            string
 	ICN            string
-	Tracing        bool
+	Tracing        string // url to tracing server, e.g. zipkin
 }
 
 func New() Config {
@@ -29,9 +29,9 @@ func New() Config {
 			getEnvDefault("ALLOWED_ORIGINS", fmt.Sprintf("http://%s:%s,https://%s:%s", host, port, host, port)), ",",
 		),
 		Env:     Environment(getEnvDefault("ENV", "prod")),
-		DSN:     getEnvDefault("DSN", ""),
-		ICN:     getEnvDefault("ICN", ""),
-		Tracing: getEnvDefault("TRACING", "false") == "true",
+		DSN:     os.Getenv("DSN"),
+		ICN:     os.Getenv("ICN"),
+		Tracing: os.Getenv("TRACING"),
 	}
 }
 

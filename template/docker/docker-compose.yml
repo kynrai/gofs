@@ -15,3 +15,8 @@ services:
       - 5432:5432
     logging:
       driver: none
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411

@@ -15,12 +15,16 @@ test:
 
 dbup:
 	@if [ -n "$$DSN" ]; then \
-		docker compose -f docker/postgres/docker-compose.yml up -d; \
+		docker compose -f docker/docker-compose.yml up -d postgres; \
+    fi
+
+	@if [ -n "$$TRACING" ]; then \
+		docker compose -f docker/docker-compose.yml up -d zipkin; \
     fi
 .PHONY: dbup
 
 dbdown:
-	@docker compose -f docker/postgres/docker-compose.yml down
+	@docker compose -f docker/docker-compose.yml down
 .PHONY: dbdown
 
 gendata: dbdown dbup
